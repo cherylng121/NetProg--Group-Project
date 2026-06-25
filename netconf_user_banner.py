@@ -95,3 +95,44 @@ def configure_interface_description(
     </config>"""
     m.edit_config(target="running", config=payload)
     print(f"[OK] Interface {interface} description set.")
+
+#Retrieve running configuration
+def retrieve_running_config(m):
+    """
+    Retrieve and display selected information from the running configuration.
+    Uses the NETCONF get-config operation with a subtree filter.
+    """
+    filter_xml = """
+    <filter>
+      <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+        <hostname/>
+        <banner/>
+        <username/>
+        <interface/>
+      </native>
+    </filter>"""
+
+    try:
+        reply = m.get_config(source="running", filter=("subtree", filter_xml))
+        data = xmltodict.parse(str(reply))
+        native = (
+            data.get("rpc-reply", {})
+                .get("data", {})
+                .get("native", {})
+        )
+
+        print("\n[Running Config - Key Sections]")
+
+        for key in ["hostname", "banner", "username", "interface"]:
+            if key in native:
+                print(f"\n--- {key.upper()} ---")
+                print(json.dumps(native[key], indent=4))
+
+    except RPCError as e:
+        print(f"[WARN] Filtered get-config failed: {e}")
+
+        # Retrieve the full running configuration if the filter is not supported
+        reply = m.get_config(source="running")
+
+        print("[Running Config (first 800 characters)]")
+        print(str(reply)[:800])
