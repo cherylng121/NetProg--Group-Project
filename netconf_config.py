@@ -12,11 +12,6 @@ PASS = os.getenv("DEVICE_PASS", "cisco")
 
 
 def connect():
-    """
-    Establish a NETCONF session with the IOS-XE device using ncclient.
-    Port 830 is the standard NETCONF-over-SSH port (RFC 6242).
-    hostkey_verify=False is used in lab environments (not for production).
-    """
     print(f"\n[NETCONF] Connecting to {HOST}:{PORT} as '{USER}' ...")
     conn = manager.connect(
         host=HOST,
