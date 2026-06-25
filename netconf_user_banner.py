@@ -136,3 +136,15 @@ def retrieve_running_config(m):
 
         print("[Running Config (first 800 characters)]")
         print(str(reply)[:800])
+
+# Display NETCONF capabilities supported by the device
+def show_capabilities(m):
+    """
+    Display the NETCONF capabilities advertised by the device.
+    """
+    caps = list(m.server_capabilities)
+
+    print(f"\n[NETCONF Capabilities] ({len(caps)} total - showing first 10)")
+
+    for cap in caps[:10]:
+        print(f"  {cap}")
