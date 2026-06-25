@@ -60,3 +60,26 @@ def configure_ip_address(
 
     m.edit_config(target="running", config=payload)
     print(f"[OK] Configured {ip}/{prefix} on {interface}")
+
+# Task 2: Configure Interface (no shutdown)
+def configure_interface(m, interface="GigabitEthernet2"):
+    """
+    Enable an interface using Cisco IOS-XE native YANG.
+    """
+    iface_num = interface.replace("GigabitEthernet", "")
+    payload = f"""
+    <config>
+      <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+        <interface>
+          <GigabitEthernet>
+            <name>{iface_num}</name>
+            <shutdown xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0"
+                      nc:operation="remove"/>
+          </GigabitEthernet>
+        </interface>
+      </native>
+    </config>
+    """
+    
+    m.edit_config(target="running", config=payload)
+    print(f"[OK] Interface {interface} enabled (no shutdown).")
