@@ -148,3 +148,24 @@ def show_capabilities(m):
 
     for cap in caps[:10]:
         print(f"  {cap}")
+
+# Run all NETCONF tasks
+def run():
+    """
+    Execute all NETCONF configuration tasks.
+    """
+    try:
+        with connect() as m:
+            show_capabilities(m)
+            configure_user_account(m)
+            configure_banner(m)
+            configure_interface_description(m)
+            retrieve_running_config(m)
+
+    except Exception as e:
+        print(f"[ERROR] NETCONF Task 2 failed: {e}")
+        raise
+
+
+if __name__ == "__main__":
+    run()
