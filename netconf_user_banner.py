@@ -53,3 +53,24 @@ def configure_user_account(
     </config>"""
     m.edit_config(target="running", config=payload)
     print(f"[OK] User account '{username}' (privilege {privilege}) configured.")
+
+#Configure MOTD banner
+def configure_banner(
+        m,
+        message="Authorised access only. Disconnect immediately if not."):
+    """
+    Configure the Message of the Day (MOTD) banner.
+    Uses the Cisco-IOS-XE-native YANG model.
+    """
+    payload = f"""
+    <config>
+      <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+        <banner>
+          <motd>
+            <banner>{message}</banner>
+          </motd>
+        </banner>
+      </native>
+    </config>"""
+    m.edit_config(target="running", config=payload)
+    print("[OK] Banner MOTD configured.")
