@@ -112,3 +112,53 @@ def configure_static_route(m,
 
     m.edit_config(target="running", config=payload)
     print(f"[OK] Static route {destination}/{mask} via {next_hop} configured.")
+
+# ── Task 4: Retrieve Device Information ──────────────────────────────────────
+def get_device_info(m):
+    """
+    Retrieve hostname and IOS version from the running configuration.
+    """
+
+    filter_xml = """
+    <filter>
+      <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+        <version/>
+        <hostname/>
+      </native>
+    </filter>
+    """
+
+    try:
+        reply = m.get_config(
+            source="running", 
+            filter=("subtree", filter_xml)
+            )
+        
+        data = xmltodict.parse(str(reply))
+
+        native = (data.get("rpc-reply", {})
+                      .get("data", {})
+                      .get("native", {}))
+        
+        print("\n[Device Info]")
+        print(f"  Hostname : {native.get('hostname', 'N/A')}")
+        print(f"  Version  : {native.get('version', 'N/A')}")
+
+    except RPCError as e:
+        print(f"[WARN] Unable to retrieve filtered data: {e}")
+
+# Main runner
+def run():
+    """Run all NETCONF_CONFIG tasks in sequence."""
+    try:
+        with connect() as m:
+            configure_ip_address(m)
+            configure_interface(m)
+            configure_static_route(m)
+            get_device_info(m)
+    except Exception as e:
+        print(f"[ERROR] NETCONF_CONFIG failed: {e}")
+        raise
+
+if __name__ == "__main__":
+    run()
