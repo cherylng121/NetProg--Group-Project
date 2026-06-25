@@ -26,7 +26,7 @@ def connect():
     print("[NETCONF] Session established successfully.")
     return conn
 
-# Task 1: Configure IP Address
+# Configure IP Address
 def configure_ip_address(
     m,
     interface="GigabitEthernet2",
@@ -61,7 +61,7 @@ def configure_ip_address(
     m.edit_config(target="running", config=payload)
     print(f"[OK] Configured {ip}/{prefix} on {interface}")
 
-# Task 2: Configure Interface (no shutdown)
+# Configure Interface (no shutdown)
 def configure_interface(m, interface="GigabitEthernet2"):
     """
     Enable an interface using Cisco IOS-XE native YANG.
@@ -80,6 +80,35 @@ def configure_interface(m, interface="GigabitEthernet2"):
       </native>
     </config>
     """
-    
+
     m.edit_config(target="running", config=payload)
     print(f"[OK] Interface {interface} enabled (no shutdown).")
+
+# Configure Static Route
+def configure_static_route(m,
+                            destination="0.0.0.0",
+                            mask="0.0.0.0",
+                            next_hop="10.10.10.254"):
+    """
+    Configure a static route using Cisco IOS-XE native YANG model.
+    """
+    payload = f"""
+    <config>
+      <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+        <ip>
+          <route>
+            <ip-route-interface-forwarding-list>
+              <prefix>{destination}</prefix>
+              <mask>{mask}</mask>
+              <fwd-list>
+                <fwd>{next_hop}</fwd>
+              </fwd-list>
+            </ip-route-interface-forwarding-list>
+          </route>
+        </ip>
+      </native>
+    </config>
+    """
+
+    m.edit_config(target="running", config=payload)
+    print(f"[OK] Static route {destination}/{mask} via {next_hop} configured.")
