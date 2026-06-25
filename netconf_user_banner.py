@@ -74,3 +74,24 @@ def configure_banner(
     </config>"""
     m.edit_config(target="running", config=payload)
     print("[OK] Banner MOTD configured.")
+
+#Configure interface description
+def configure_interface_description(
+        m,
+        interface="GigabitEthernet2",
+        description="WAN Link - UTM SECR3253 Group Assignment"):
+    """
+    Configure the description for the selected interface.
+    Uses the standard ietf-interfaces YANG model.
+    """
+    payload = f"""
+    <config>
+      <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+        <interface>
+          <name>{interface}</name>
+          <description>{description}</description>
+        </interface>
+      </interfaces>
+    </config>"""
+    m.edit_config(target="running", config=payload)
+    print(f"[OK] Interface {interface} description set.")
