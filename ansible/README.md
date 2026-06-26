@@ -30,3 +30,11 @@ Install Ansible and the required Cisco collections:
 ```bash
 pip install ansible
 ansible-galaxy collection install cisco.ios ansible.netcommon
+
+## How to Run
+
+From the `ansible` folder, run:
+
+```bash
+ansible-playbook configure_device.yml
+```
