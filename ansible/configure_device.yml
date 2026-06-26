@@ -1,0 +1,52 @@
+---
+- name: Configure Cisco IOS XE device using Ansible
+  hosts: ios_routers
+  gather_facts: false
+
+  vars:
+    target_interface: GigabitEthernet2
+    interface_ip: 10.10.10.1
+    interface_mask: 255.255.255.0
+    interface_description: WAN Link - UTM SECR3253 Group Assignment
+    local_username: netadmin
+    local_secret: SecurePass123!
+    motd_banner: Authorised access only. Disconnect immediately if not.
+    static_route_next_hop: 10.10.10.254
+
+  tasks:
+    - name: Configure interface IP address and description
+      cisco.ios.ios_config:
+        lines:
+          - description {{ interface_description }}
+          - ip address {{ interface_ip }} {{ interface_mask }}
+          - no shutdown
+        parents:
+          - interface {{ target_interface }}
+
+    - name: Configure local user account
+      cisco.ios.ios_config:
+        lines:
+          - username {{ local_username }} privilege 15 secret {{ local_secret }}
+
+    - name: Configure MOTD banner
+      cisco.ios.ios_banner:
+        banner: motd
+        text: "{{ motd_banner }}"
+        state: present
+
+    - name: Configure default static route
+      cisco.ios.ios_config:
+        lines:
+          - ip route 0.0.0.0 0.0.0.0 {{ static_route_next_hop }}
+
+    - name: Retrieve device information
+      cisco.ios.ios_command:
+        commands:
+          - show version
+          - show ip interface brief
+          - show running-config | include hostname|username|banner|ip route
+      register: device_info
+
+    - name: Display retrieved device information
+      ansible.builtin.debug:
+        var: device_info.stdout_lines
