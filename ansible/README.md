@@ -30,6 +30,13 @@ Install Ansible and the required Cisco collections:
 ```bash
 pip install ansible
 ansible-galaxy collection install cisco.ios ansible.netcommon
+```
+
+The Cisco IOS XE device must be reachable using SSH at:
+
+```text
+192.168.56.101
+```
 
 ## How to Run
 
