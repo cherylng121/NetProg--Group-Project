@@ -1,4 +1,4 @@
-# Task 3 - Ansible Playbook
+# Ansible Playbook
 
 This folder contains the Ansible solution for the SECR3253 Network Programming group assignment.
 
