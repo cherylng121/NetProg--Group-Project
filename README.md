@@ -51,3 +51,4 @@ To run the Ansible playbook:
 ```bash
 cd ansible
 ansible-playbook configure_device.yml
+```
