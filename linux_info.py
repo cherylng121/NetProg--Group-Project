@@ -10,3 +10,7 @@ def run():
     subprocess.run(["lscpu"])
     print("\n[Memory Usage]")
     subprocess.run(["free", "-h"])
+    print("\n[Disk Usage]")
+    subprocess.run(["df", "-h", "/"])
+    print("\n[Logged-in Users]")
+    subprocess.run(["who"])
