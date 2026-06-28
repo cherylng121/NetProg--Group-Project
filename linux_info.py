@@ -14,3 +14,6 @@ def run():
     subprocess.run(["df", "-h", "/"])
     print("\n[Logged-in Users]")
     subprocess.run(["who"])
+    print("\n[Top 5 Running Processes by CPU Usage]")
+    subprocess.run("ps -eo pid,comm,%cpu --sort=-%cpu | head -n 6", shell=True)
+    print("\n--------------------------------")
