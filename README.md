@@ -84,6 +84,7 @@ The container will:
 
 - Run the Ansible playbook at `ansible/configure_device.yml` against the device defined in `ansible/inventory.ini`.
 - Execute the NETCONF Python scripts located in `NetProg--Group-Project/` to apply additional YANG-based changes and retrieve device information.
+- Execute `linux_info.py` to collect and display Linux host system information: hostname, date/time, CPU info, memory usage, disk usage, logged-in users, and top CPU processes.
 
 Environment variables `DEVICE_HOST`, `DEVICE_PORT`, `DEVICE_USER`, and `DEVICE_PASS` are used by the NETCONF scripts.
 
