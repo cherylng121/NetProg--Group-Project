@@ -21,5 +21,12 @@ if [ -f /workspace/NetProg--Group-Project/netconf_config.py ]; then
   python /workspace/NetProg--Group-Project/netconf_config.py || echo "[entrypoint] netconf_config failed"
 fi
 
+echo "[entrypoint] Collecting Linux system information"
+if [ -f /workspace/linux_info.py ]; then
+  python /workspace/linux_info.py || echo "[entrypoint] linux_info.py failed"
+else
+  echo "[entrypoint] linux_info.py not found"
+fi
+
 echo "[entrypoint] Automation run complete. Keeping container open for debugging."
 exec /bin/sh
