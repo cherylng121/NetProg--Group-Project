@@ -2,11 +2,12 @@ FROM python:3.11-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends gcc libxml2-dev libxslt1-dev libffi-dev libssl-dev sshpass ssh \
+RUN rm -f /etc/apt/apt.conf.d/docker-clean \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir ansible ncclient xmltodict paramiko
+RUN pip install --no-cache-dir --progress-bar off ansible ncclient xmltodict paramiko
 
 # Install required Ansible collections from provided requirements file
 COPY ansible/requirements.yml /tmp/requirements.yml
